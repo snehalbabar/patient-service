@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PatientResponseDTO {
+public class PatientResponseDto {
     private String id;
     private String name;
     private String email;
