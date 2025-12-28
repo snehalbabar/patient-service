@@ -2,6 +2,7 @@ package com.example.patientService.service;
 
 import com.example.patientService.dto.PatientRequestDto;
 import com.example.patientService.dto.PatientResponseDto;
+import com.example.patientService.exception.EmailAlreadyExistsException;
 import com.example.patientService.mapper.PatientMapper;
 import com.example.patientService.model.Patient;
 import com.example.patientService.repository.PatientRepository;
@@ -24,10 +25,15 @@ public class PatientService {
     }
 
 
-    public PatientResponseDto createPatient(PatientRequestDto patientRequestDto){
-      Patient newPatient = patientRepository.save(PatientMapper.toModel(patientRequestDto));
+    public PatientResponseDto createPatient(PatientRequestDto patientRequestDto) {
 
-      return PatientMapper.toDTO(newPatient);
+        if (patientRepository.existsByEmail(patientRequestDto.getEmail())) {
+            throw new EmailAlreadyExistsException("email already exists" + patientRequestDto.getEmail());
+        }
+        Patient newPatient = patientRepository.save(PatientMapper.toModel(patientRequestDto));
+
+        //
+        return PatientMapper.toDTO(newPatient);
 
     }
 
